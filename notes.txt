@@ -14,3 +14,81 @@ to check cluster is running or not: "kubectl cluster-info", then will see if the
 ->  without running minikube, if you directly runs the kubectl commands don't gets anything..as there is no clusters !
     because minikube is a tool thats accept local kubernetes clusters on a laptop. and without minikube starts ,there is no cluster running.
     so kubectl can't connect anywhere.
+
+//----------------------------------------
+
+-> finally we are ready to depoly the files.
+
+    for depoly: "kubectl apply -f k8s/"    <- so it will take both the depolyment.yaml and service.yaml
+
+    it shows:    ||> deployment.apps/kubernetes-journey-api created
+                 ||> service/devops-kubernetes-api-service created
+
+    through this process.. the kubernetes api's server will read that above 2 yaml files,
+    this deployment create pods via replica set and service will setup network routing to the pods. ‼️
+
+-> for getting access the pod information and check the pod status:
+    
+    "kubectl get pods -w"
+
+    its shows:||>  NAME                                      READY   STATUS    RESTARTS   AGE
+              ||>  kubernetes-journey-api-794f8f6c7d-lzvr6   1/1     Running   0          9m54s
+              ||>  kubernetes-journey-api-794f8f6c7d-qtp5h   1/1     Running   0          9m54s
+    it means... formed the 2 replica of our docker image as we suggested !
+
+-> similarlly ... to check the services:
+
+    "kubectl get services"
+
+    its shows:||>  NAME                            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+              ||>  devops-kubernetes-api-service   NodePort    10.108.24.60   <none>        3000:31051/TCP   14m
+              ||>  kubernetes                      ClusterIP   10.96.0.1      <none>        443/TCP          43m
+
+==> ok fine... all are okke.
+
+    now finally time to test out the application.
+
+    minikube is providing very simple way to get access to services.(above mentioned !)
+    
+    run : "minikube service our-app-service-name" ===> "minikube service devops-kubernetes-api-service"
+
+    it shows: 
+
+    ||> ┌───────────┬───────────────────────────────┬─────────────┬───────────────────────────┐
+    ||> │ NAMESPACE │             NAME              │ TARGET PORT │            URL            │
+    ||> ├───────────┼───────────────────────────────┼─────────────┼───────────────────────────┤
+    ||> │ default   │ devops-kubernetes-api-service │ 3000        │ http://192.168.49.2:31051 │
+    ||> └───────────┴───────────────────────────────┴─────────────┴───────────────────────────┘
+    ||> 🏃  Starting tunnel for service devops-kubernetes-api-service./
+    ||> ┌───────────┬───────────────────────────────┬─────────────┬────────────────────────┐
+    ||> │ NAMESPACE │             NAME              │ TARGET PORT │          URL           │
+    ||> ├───────────┼───────────────────────────────┼─────────────┼────────────────────────┤
+    ||> │ default   │ devops-kubernetes-api-service │             │ http://127.0.0.1:63403 │
+    ||> └───────────┴───────────────────────────────┴─────────────┴────────────────────────┘
+    ||> 🏃  Starting tunnel for service devops-kubernetes-api-service. 
+    ||> 🎉  Opening service default/devops-kubernetes-api-service in default browser...
+    ||> ❗  Because you are using a Docker driver on windows, the terminal needs to be open to run it.
+
+
+    in browser:
+
+    {
+      "message": "Hello from a Container!",
+      "service": "hello-node",
+      "pod": "kubernetes-journey-api-794f8f6c7d-lzvr6",
+      "time": "2025-10-07T14:56:46.940Z"
+    }
+
+    when you try to refresh the page... its noticable that..👇
+
+    "kubernetes-journey-api-794f8f6c7d-lzvr6"
+    "kubernetes-journey-api-794f8f6c7d-qtp5h"
+
+    the last part of POD id is changing !!
+
+        - it means
+        - making request to 2 different servers
+        - this small change represents the Kubernetes can automaticaly REPLACE - REPILICATE - REBALANCED workflows accross the clusters.
+        - letting the system to scale up or down without any problems ‼️
+        - no problem whether one pod or container dies or down.. other one will appears and ready to serves for users !
+
