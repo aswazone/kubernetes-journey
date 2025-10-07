@@ -1,4 +1,16 @@
 Now we can publish the docker image:
     - use the terminal to create a tag: "docker tag kubernetes-journey-api:latest aswamanu/kubernetes-journey-api:latest"
     - then push to dockerhub: "docker push aswamanu/kubernetes-journey-api:latest"
+then added the depolyment.yaml and service.yaml
+then use the CLI : "minikube start"
 
+then using the kubectl: "kubectl get nodes" , to know that the minikube is on action - running a control-plane
+
+to check cluster is running or not: "kubectl cluster-info", then will see if the cluster is healthy..
+    `Kubernetes control plane is running at https://127.0.0.1:58337
+     CoreDNS is running at https://127.0.0.1:58337/api/v1/namespaces/kube-system/services/kube-dns:dns/prox`
+
+
+->  without running minikube, if you directly runs the kubectl commands don't gets anything..as there is no clusters !
+    because minikube is a tool thats accept local kubernetes clusters on a laptop. and without minikube starts ,there is no cluster running.
+    so kubectl can't connect anywhere.
