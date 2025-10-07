@@ -1,0 +1,4 @@
+Now we can publish the docker image:
+    - use the terminal to create a tag: "docker tag kubernetes-journey-api:latest aswamanu/kubernetes-journey-api:latest"
+    - then push to dockerhub: "docker push aswamanu/kubernetes-journey-api:latest"
+
