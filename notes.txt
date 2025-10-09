@@ -92,3 +92,71 @@ to check cluster is running or not: "kubectl cluster-info", then will see if the
         - letting the system to scale up or down without any problems ‼️
         - no problem whether one pod or container dies or down.. other one will appears and ready to serves for users !
 
+=> Then we automated the process.. instead of manualy doing the steps.
+
+    Created a shell script -> deploy.sh
+
+    and made run it : "npm run deploy" (in the Git bash of terminal ‼️)
+
+    show the automation like this:
+
+        || $ npm run deploy
+        || 
+        || > kubernetes-journey@1.0.0 deploy
+        || > sh deploy.sh
+        || 
+        || Building Docker image aswamanu/kubernetes-journey-api:latest ...
+        || [+] Building 7.3s (10/10) FINISHED                                                                                             docker:desktop-linux
+        ||  => [internal] load build definition from Dockerfile                                                                                           0.0s
+        ||  => => transferring dockerfile: 273B                                                                                                           0.0s 
+        ||  => [internal] load metadata for docker.io/library/node:18-alpine                                                                              0.3s 
+        ||  => [internal] load .dockerignore                                                                                                              0.0s
+        ||  => => transferring context: 112B                                                                                                              0.0s 
+        ||  => [1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e                        0.1s 
+        ||  => => resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e                        0.1s 
+        ||  => [internal] load build context                                                                                                              0.1s 
+        ||  => => transferring context: 749B                                                                                                              0.0s 
+        ||  => CACHED [2/5] WORKDIR /app                                                                                                                  0.0s
+        ||  => CACHED [3/5] COPY package*.json package-lock.json ./                                                                                       0.0s 
+        ||  => CACHED [4/5] RUN npm ci --omit=dev                                                                                                         0.0s 
+        ||  => [5/5] COPY . .                                                                                                                             0.4s 
+        ||  => exporting to image                                                                                                                         5.5s
+        ||  => => exporting layers                                                                                                                        4.6s 
+        ||  => => exporting manifest sha256:670b81645fa59dcb455d168ad010e7590097422e172d17426311fa1af98a7838                                              0.0s
+        ||  => => exporting config sha256:7f4b2881be701880b2d957733a3def7a1d7f78bdc50cb7f9354ae0eff99e0e71                                                0.0s 
+        ||  => => exporting attestation manifest sha256:94ca8a91a8b69f2207617b01dd172d24b471f502740bcc4ef63948a730ba27a7                                  0.1s 
+        ||  => => exporting manifest list sha256:75f19757c03e6c051ffee34f7f9a93dd9e163fc71a935560d16dc14c4cec1af5                                         0.0s 
+        ||  => => naming to docker.io/aswamanu/kubernetes-journey-api:latest                                                                              0.0s 
+        ||  => => unpacking to docker.io/aswamanu/kubernetes-journey-api:latest                                                                           0.6s 
+        || 
+        || View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/t5xbv55h7hf4ga162vrx7gp77
+        || Pushing Image to Dockerhub ...
+        || The push refers to repository [docker.io/aswamanu/kubernetes-journey-api]
+        || 0ad5dad0477e: Pushed
+        || f18232174bc9: Layer already exists
+        || c6ad738f6c91: Pushed
+        || 1e5a4c89cee5: Layer already exists
+        || b62d36ab6cfc: Layer already exists
+        || 25ff2da83641: Layer already exists 
+        || dd71dde834b5: Layer already exists
+        || 9208604d011a: Layer already exists
+        || 7f5fca1cde31: Layer already exists
+        || latest: digest: sha256:75f19757c03e6c051ffee34f7f9a93dd9e163fc71a935560d16dc14c4cec1af5 size: 856
+        || Applying Kubernetes manifests ...
+        || deployment.apps/kubernetes-journey-api unchanged
+        || service/kubernetes-journey-api-service created
+        || Getting pods ...
+        || NAME                                      READY   STATUS    RESTARTS      AGE
+        || kubernetes-journey-api-794f8f6c7d-lzvr6   1/1     Running   2 (15m ago)   44h
+        || kubernetes-journey-api-794f8f6c7d-qtp5h   1/1     Running   2 (15m ago)   44h
+        || Getting services ...
+        || NAME                             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+        || devops-kubernetes-api-service    NodePort    10.108.24.60   <none>        3000:31051/TCP   44h
+        || kubernetes                       ClusterIP   10.96.0.1      <none>        443/TCP          44h
+        || kubernetes-journey-api-service   NodePort    10.103.3.88    <none>        3000:30888/TCP   0s
+        || Fetching the main service ...
+        || NAME                             TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+        || kubernetes-journey-api-service   NodePort   10.103.3.88   <none>        3000:30888/TCP   0s 
+
+
+        you can find that.. all the process automated !!  - now we can easly scale project.     
